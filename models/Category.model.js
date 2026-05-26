@@ -4,19 +4,19 @@ const CategorySchema = new mongoose.Schema(
   {
     id: {
       type: Number,
-      required: true,
+      required: [true, "Category id is required."],
     },
     url: {
       type: String,
-      required: true,
+      required: [true, "Category related image url is required."],
     },
     name: {
       type: String,
-      required: true,
+      required: [true, "Mention category name."],
     },
     for: {
       type: String,
-      required: true,
+      required: [true, "Mention this category is for whom."],
     },
   },
   {

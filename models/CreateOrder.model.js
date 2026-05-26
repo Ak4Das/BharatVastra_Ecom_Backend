@@ -2,100 +2,134 @@ import mongoose from "mongoose"
 
 const CreateOrderSchema = new mongoose.Schema(
   {
-    id: {
-      type: Number,
-    },
-    url: {
-      type: String,
-    },
-    name: {
-      type: String,
-    },
-    price: {
-      type: Number,
-    },
-    rating: {
-      type: Number,
-      min: 0,
-      max: 5,
-    },
-    discount: {
-      type: String,
-    },
-    offer: {
-      type: String,
-    },
-    gender: {
-      type: String,
-      enum: ["male", "female", "unisex"],
-    },
-    description: [
-      {
-        type: String,
-      },
-    ],
-    similarProducts: [
-      {
-        id: {
-          type: Number,
+    products: {
+      type: [
+        {
+          id: {
+            type: Number,
+            required: [true, "Product id is required."],
+          },
+          url: {
+            type: String,
+            required: [true, "Product url is required."],
+          },
+          name: {
+            type: String,
+            required: [true, "Product name is required."],
+          },
+          price: {
+            type: Number,
+            required: [true, "Product price is required."],
+          },
+          rating: {
+            type: Number,
+            min: 0,
+            max: 5,
+            required: [true, "Product rating is required."],
+          },
+          discount: {
+            type: String,
+            required: [true, "Mention product have discount or not."],
+          },
+          offer: {
+            type: String,
+            required: [true, "Mention product have offer or not."],
+          },
+          gender: {
+            type: String,
+            enum: ["male", "female", "unisex"],
+            required: [true, "Mention product is for male or female."],
+          },
+          description: [
+            {
+              type: String,
+              required: [true, "Product description is required."],
+            },
+          ],
+          similarProducts: [
+            {
+              id: {
+                type: Number,
+                required: [true, "Similar products is required."],
+              },
+            },
+          ],
+          soldBy: {
+            type: String,
+            required: [true, "Mention product seller."],
+          },
+          shipsFrom: {
+            type: String,
+            required: [true, "Mention product ships from."],
+          },
+          category: {
+            type: String,
+            required: [true, "Mention product category."],
+          },
+          commonCategory: {
+            type: String,
+            required: [true, "Mention common category of product."],
+          },
+          mainCategory: [
+            {
+              type: String,
+              required: [true, "Mention main category of product."],
+            },
+          ],
+          material: {
+            type: String,
+            required: [true, "Product material is required."],
+          },
+          deliveryCharge: {
+            type: Number,
+            required: [true, "Mention delivery charge of the product."],
+          },
+          freeDelivery: {
+            type: Boolean,
+            required: [true, "Mention free delivery is available or not."],
+          },
+          newArrival: {
+            type: Boolean,
+            required: [true, "Mention product is new arrival or not."],
+          },
+          addToCart: {
+            type: Boolean,
+            enum: [true, false],
+          },
+          addToWishList: {
+            type: Boolean,
+          },
+          size: {
+            type: String,
+          },
+          quantity: {
+            type: Number,
+          },
+          productDetails: {
+            topHighlights: {
+              type: mongoose.Schema.Types.Mixed,
+              required: [true, "Top highlights is required."],
+            },
+            additionalInformation: {
+              type: mongoose.Schema.Types.Mixed,
+              required: [true, "Additional information is required."],
+            },
+            itemDetails: {
+              type: mongoose.Schema.Types.Mixed,
+              required: [true, "Item details is required."],
+            },
+            style: {
+              type: mongoose.Schema.Types.Mixed,
+              required: [true, "Product style is required"],
+            },
+          },
         },
-      },
-    ],
-    soldBy: {
-      type: String,
+      ],
+      required: [true, "Products array is required."],
     },
-    shipsFrom: {
-      type: String,
-    },
-    category: {
-      type: String,
-    },
-    commonCategory: {
-      type: String,
-    },
-    mainCategory: [
-      {
-        type: String,
-      },
-    ],
-    material: {
-      type: String,
-    },
-    deliveryCharge: {
-      type: Number,
-    },
-    freeDelivery: {
-      type: Boolean,
-    },
-    newArrival: {
-      type: Boolean,
-    },
-    addToCart: {
-      type: Boolean,
-      enum: [true, false],
-    },
-    addToWishList: {
-      type: Boolean,
-    },
-    size: {
-      type: String,
-    },
-    quantity: {
-      type: Number,
-    },
-    productDetails: {
-      topHighlights: {
-        type: mongoose.Schema.Types.Mixed,
-      },
-      additionalInformation: {
-        type: mongoose.Schema.Types.Mixed,
-      },
-      itemDetails: {
-        type: mongoose.Schema.Types.Mixed,
-      },
-      style: {
-        type: mongoose.Schema.Types.Mixed,
-      },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "User id is required."],
     },
   },
   {

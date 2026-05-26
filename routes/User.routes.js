@@ -1,38 +1,28 @@
 import {
   fetchAllUsers,
   fetchUserById,
-  fetchUserByPassword,
-  fetchUserByEmail,
   postNewUser,
   fetchByIdAndUpdate,
   fetchByIdAndUpdateAddress,
   fetchByIdAndUpdateCartItems,
   fetchByIdAndUpdateWishlistItems,
-  fetchByIdAndDelete,
 } from "../controllers/User.controller.js"
 
 import express from "express"
-const app = express()
-app.use(express.json())
+const router = express.Router()
 
-app.get("/", fetchAllUsers)
+router.get("/", fetchAllUsers)
 
-app.get("/:id", fetchUserById)
+router.get("/:id", fetchUserById)
 
-app.get("/password/:password", fetchUserByPassword)
+router.post("/saveUser", postNewUser)
 
-app.get("/email/:email", fetchUserByEmail)
+router.post("/updateUser/:id", fetchByIdAndUpdate)
 
-app.post("/saveUser", postNewUser)
+router.post("/updateUserAddress/:id", fetchByIdAndUpdateAddress)
 
-app.post("/updateUser/:id", fetchByIdAndUpdate)
+router.post("/updateCartItems/:id", fetchByIdAndUpdateCartItems)
 
-app.post("/updateUserAddress/:id", fetchByIdAndUpdateAddress)
+router.post("/updateWishlistItems/:id", fetchByIdAndUpdateWishlistItems)
 
-app.post("/updateCartItems/:id", fetchByIdAndUpdateCartItems)
-
-app.post("/updateWishlistItems/:id", fetchByIdAndUpdateWishlistItems)
-
-app.delete("/deleteUser/:id", fetchByIdAndDelete)
-
-export default app
+export default router

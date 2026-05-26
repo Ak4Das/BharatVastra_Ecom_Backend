@@ -1,132 +1,142 @@
 import ClothModel from "../models/Cloth.model.js"
+import { BadRequestError, NotFoundError } from "../utils/customErrorHandler.js"
 
-export const getAllCloths = async () => {
+export const getAllCloths = async (req, res) => {
   try {
     const allCloths = await ClothModel.find()
-    return allCloths
+    res.status(200)
+    res.json(allCloths)
   } catch (error) {
     throw error
   }
 }
 
-export const getClothById = async (id) => {
+export const getClothById = async (req, res) => {
   try {
-    const cloth = await ClothModel.findOne({ id: id })
-    return cloth
+    const id = req.params.id
+    if (!id) {
+      throw new BadRequestError("Not mentioned product id on API.")
+    }
+    const cloth = await ClothModel.findOne({ id })
+    if (cloth === null) {
+      throw new NotFoundError("Product not found.")
+    }
+    res.status(200)
+    res.json(cloth)
   } catch (error) {
     throw error
   }
 }
 
-export const getClothsByCategory = async (category) => {
+export const getNewArriveCloths = async (req, res) => {
   try {
-    const cloths = await ClothModel.find({ commonCategory: category })
-    return cloths
+    const cloth = await ClothModel.find({ newArrival: true })
+    if (!cloth.length) {
+      throw new NotFoundError("No products are newly arrived.")
+    }
+    res.status(200)
+    res.json(cloth)
   } catch (error) {
     throw error
   }
 }
 
-export const getClothsByRating = async (rating) => {
+export const getDistinctCommonCategories = async (req, res) => {
   try {
-    const cloths = await ClothModel.find({ rating: { $gte: rating } })
-    return cloths
+    const categories = await ClothModel.distinct("commonCategory")
+    res.status(200)
+    res.json(categories)
   } catch (error) {
     throw error
   }
 }
 
-export const getClothsByCategoryAndRating = async (category, rating) => {
+export const getOfferOnACategory = async (req, res) => {
   try {
-    const cloths = await ClothModel.find({
-      category: category,
-      rating: { $gte: rating },
+    const commonCategory = req.params.commonCategory
+    if (!commonCategory) {
+      throw new BadRequestError("Common category is missing.")
+    }
+    const cloth = await ClothModel.find({
+      commonCategory,
+      $expr: {
+        $gt: [
+          {
+            $toInt: {
+              $replaceOne: {
+                input: "$offer",
+                find: "%",
+                replacement: "",
+              },
+            },
+          },
+          0,
+        ],
+      },
     })
-    return cloths
+    if (cloth.length === 0) {
+      throw new NotFoundError(`No ${commonCategory} available with offer.`)
+    }
+    res.status(200)
+    res.json(cloth)
   } catch (error) {
     throw error
   }
 }
 
-export const getClothsByGender = async (gender) => {
+export const getClothsByMainCategory = async (req, res) => {
   try {
-    const cloths = await ClothModel.find({ gender: gender })
-    return cloths
-  } catch (error) {
-    throw error
-  }
-}
-
-export const getClothsByMainCategory = async (mainCategory) => {
-  try {
+    const mainCategory = req.params.mainCategory
+    if (!mainCategory) {
+      throw new BadRequestError("Main category is missing.")
+    }
     const cloths = await ClothModel.find({ mainCategory: mainCategory })
-    return cloths
+    if (cloths.length === 0) {
+      throw new NotFoundError(`No product available for ${mainCategory}.`)
+    }
+    res.status(200)
+    res.json(cloths)
   } catch (error) {
     throw error
   }
 }
 
-export const getClothsByMaterial = async (material) => {
+export const getClothsByCommonCategory = async (req, res) => {
   try {
-    const cloths = await ClothModel.find({ material: material })
-    return cloths
+    const commonCategory = req.params.commonCategory
+    if (!commonCategory) {
+      throw new BadRequestError("Common category is missing.")
+    }
+    const cloths = await ClothModel.find({ commonCategory })
+    if (cloths.length === 0) {
+      throw new NotFoundError(`No ${commonCategory} available.`)
+    }
+    res.status(200)
+    res.json(cloths)
   } catch (error) {
     throw error
   }
 }
 
-export const getClothsByFreeDelivery = async (freeDelivery) => {
+export const findByIdAndUpdate = async (req, res) => {
   try {
-    const cloths = await ClothModel.find({ freeDelivery: freeDelivery })
-    return cloths
-  } catch (error) {
-    throw error
-  }
-}
-
-export const getClothsByNewArrival = async (newArrival) => {
-  try {
-    const cloths = await ClothModel.find({ newArrival: newArrival })
-    return cloths
-  } catch (error) {
-    throw error
-  }
-}
-
-export const saveNewCloth = async (newCloth) => {
-  try {
-    const NewCloth = new ClothModel(newCloth)
-    await NewCloth.save()
-    return NewCloth
-  } catch (error) {
-    throw error
-  }
-}
-
-export const postMultipleClothsData = async (clothsData) => {
-  try {
-    const result = await ClothModel.insertMany(clothsData)
-    return result
-  } catch (error) {
-    throw error
-  }
-}
-
-export const findByIdAndUpdate = async (id, dataToUpdate) => {
-  try {
+    const id = req.params.id
+    if (!id) {
+      throw new BadRequestError("Product id is missing.")
+    }
+    const product = await ClothModel.find({ id })
+    if (product.length === 0) {
+      throw new NotFoundError("Product not found.")
+    }
+    const dataToUpdate = req.body
+    if (!dataToUpdate) {
+      throw new BadRequestError("Request body is missing.")
+    }
     const cloth = await ClothModel.findOneAndUpdate({ id: id }, dataToUpdate, {
       new: true,
     })
-    return cloth
-  } catch (error) {
-    throw error
-  }
-}
-
-export const findByIdAndDelete = async (id) => {
-  try {
-    const cloth = await ClothModel.findOneAndDelete({ id: id })
-    return cloth
+    res.status(200)
+    res.json(cloth)
   } catch (error) {
     throw error
   }

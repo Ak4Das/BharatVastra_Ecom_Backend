@@ -1,5 +1,9 @@
 {
   "type": "module",
+  "scripts": {
+    "dev": "NODE_ENV=development node --inspect index.js",
+    "start": "NODE_ENV=development node index.js"
+  },
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",

@@ -1,9 +1,13 @@
-import { putAllCategories } from "../controllers/Category.controller.js";
+import {
+  getAllCategories,
+  getCategory
+} from "../controllers/Category.controller.js"
 
 import express from "express"
-const app = express()
-app.use(express.json())
+const router = express.Router()
 
-app.put("/seedCategories", putAllCategories)
+router.get("/", getAllCategories)
 
-export default app
+router.get("/:category", getCategory)
+
+export default router

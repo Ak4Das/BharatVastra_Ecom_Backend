@@ -1,53 +1,31 @@
 import {
-  putAllCloths,
   fetchAllCloths,
   fetchClothsById,
-  fetchClothsByCategory,
-  fetchClothsByRating,
-  fetchClothsByCategoryAndRating,
-  fetchClothsByGender,
   fetchClothsByMainCategory,
-  fetchClothsByMaterial,
-  fetchClothsByFreeDelivery,
-  fetchClothsByNewArrival,
-  postNewCloth,
-  postMultipleCloths,
   fetchByIdAndUpdate,
-  fetchByIdAndDelete,
+  fetchOfferOnACategory,
+  fetchClothsByCommonCategory,
+  fetchNewArriveCloths,
+  fetchDistinctCommonCategories,
 } from "../controllers/Cloth.controller.js"
 
 import express from "express"
-const app = express()
-app.use(express.json())
+const router = express.Router()
 
-app.get("/", fetchAllCloths)
+router.get("/", fetchAllCloths)
 
-app.get("/:id", fetchClothsById)
+router.get("/:id", fetchClothsById)
 
-app.get("/category/:category", fetchClothsByCategory)
+router.get("/newArrive/true", fetchNewArriveCloths)
 
-app.get("/rating/:rating", fetchClothsByRating)
+router.get("/categories/distinct", fetchDistinctCommonCategories)
 
-app.get("/category&rating/:category/:rating", fetchClothsByCategoryAndRating)
+router.get("/offer/:commonCategory", fetchOfferOnACategory)
 
-app.get("/gender/:gender", fetchClothsByGender)
+router.get("/mainCategory/:mainCategory", fetchClothsByMainCategory)
 
-app.get("/mainCategory/:mainCategory", fetchClothsByMainCategory)
+router.get("/commonCategory/:commonCategory", fetchClothsByCommonCategory)
 
-app.get("/material/:material", fetchClothsByMaterial)
+router.patch("/update/:id", fetchByIdAndUpdate)
 
-app.get("/freeDelivery/:freeDelivery", fetchClothsByFreeDelivery)
-
-app.get("/newArrival/:newArrival", fetchClothsByNewArrival)
-
-app.put("/seedCloths", putAllCloths)
-
-app.post("/saveCloth", postNewCloth)
-
-app.post("/saveMultipleCloths", postMultipleCloths)
-
-app.patch("/update/:id", fetchByIdAndUpdate)
-
-app.delete("/delete/:id", fetchByIdAndDelete)
-
-export default app
+export default router

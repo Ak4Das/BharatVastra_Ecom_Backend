@@ -1,63 +1,96 @@
 import CreateOrderModel from "../models/CreateOrder.model.js"
+import {
+  BadRequestError,
+  NotFoundError,
+  ValidationError,
+} from "../utils/customErrorHandler.js"
 
-export const getAllItems = async () => {
+export const getAllItems = async (req, res) => {
   try {
     const allItems = await CreateOrderModel.find()
-    return allItems
+    res.status(200)
+    res.json(allItems)
   } catch (error) {
     throw error
   }
 }
 
-export const saveNewItem = async (newItem) => {
+export const getItemsByUserId = async (req, res) => {
   try {
-    const NewItem = new CreateOrderModel(newItem)
+    if (!req.params.id) {
+      throw new BadRequestError("Not mentioned user id on API.")
+    }
+    const allItems = await CreateOrderModel.find({ userId: req.params.id })
+    res.status(200)
+    res.json(allItems)
+  } catch (error) {
+    throw error
+  }
+}
+
+export const saveNewItem = async (req, res) => {
+  try {
+    if (!req.body) {
+      throw new BadRequestError("Request body is missing.")
+    }
+    const NewItem = new CreateOrderModel(req.body)
     await NewItem.save()
-    return NewItem
+    res.status(200)
+    res.json(NewItem)
   } catch (error) {
-    throw error
+    if (error.name === "ValidationError") {
+      throw new ValidationError(error.message)
+    } else if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern)[0]
+      throw new ValidationError(`${field} must be unique`)
+    } else {
+      throw error
+    }
   }
 }
 
-export const findItemByIdAndUpdate = async (id, dataToUpdate) => {
+export const findCreateOrderByUserIdAndUpdate = async (req, res) => {
   try {
-    const item = await CreateOrderModel.findOneAndUpdate(
-      { id: id },
+    const id = req.params.id
+    if (!id) {
+      throw new BadRequestError("User id is missing.")
+    }
+    const CreateOrder = await CreateOrderModel.find({ userId: id })
+    if (CreateOrder.length === 0) {
+      throw new NotFoundError("No create order found.")
+    }
+    const dataToUpdate = req.body
+    if (!dataToUpdate) {
+      throw new BadRequestError("Request body is missing.")
+    }
+    const createOrder = await CreateOrderModel.findOneAndUpdate(
+      { userId: id },
       dataToUpdate,
       {
         new: true,
       },
     )
-    return item
+    res.status(200)
+    res.json(createOrder)
   } catch (error) {
     throw error
   }
 }
 
-export const updateItemsInCreateOrder = async (itemsData) => {
+export const findByUserIdAndDelete = async (req, res) => {
   try {
-    const a = await CreateOrderModel.deleteMany({})
-    console.log(a)
-    const result = await CreateOrderModel.insertMany(itemsData)
-    return result
-  } catch (error) {
-    throw error
-  }
-}
-
-export const deleteManyItems = async () => {
-  try {
-    const deleteData = await CreateOrderModel.deleteMany({})
-    return deleteData
-  } catch (error) {
-    throw error
-  }
-}
-
-export const findItemByIdAndDelete = async (id) => {
-  try {
-    const item = await CreateOrderModel.findOneAndDelete({ id: id })
-    return item
+    if (!req.params.id) {
+      throw new BadRequestError("User id is missing.")
+    }
+    const CreateOrder = await CreateOrderModel.find({ userId: req.params.id })
+    if (CreateOrder.length === 0) {
+      throw new NotFoundError("No create order found.")
+    }
+    const item = await CreateOrderModel.findOneAndDelete({
+      userId: req.params.id,
+    })
+    res.status(200)
+    res.json(item)
   } catch (error) {
     throw error
   }

@@ -2,60 +2,69 @@ import mongoose from "mongoose"
 
 const UserSchema = new mongoose.Schema(
   {
-    addToCartItems: [
-      {
-        id: {
-          type: Number,
+    addToCartItems: {
+      type: [
+        {
+          id: {
+            type: Number,
+          },
+          quantity: {
+            type: Number,
+          },
+          size: {
+            type: String,
+          },
         },
-        quantity: {
-          type: Number,
+      ],
+      required: true,
+    },
+    addToWishlistItems: {
+      type: [
+        {
+          id: {
+            type: Number,
+          },
         },
-        size: {
-          type: String,
+      ],
+      required: true,
+    },
+    address: {
+      type: [
+        {
+          area: {
+            type: String,
+          },
+          city: {
+            type: String,
+          },
+          country: {
+            type: String,
+          },
+          fullName: {
+            type: String,
+          },
+          id: {
+            type: Number,
+          },
+          localInfo: {
+            type: String,
+          },
+          mobNo: {
+            type: String,
+          },
+          pinCode: {
+            type: String,
+          },
+          selected: {
+            type: Boolean,
+          },
+          state: {
+            type: String,
+          },
         },
-      },
-    ],
-    addToWishlistItems: [
-      {
-        id: {
-          type: Number,
-        },
-      },
-    ],
-    address: [
-      {
-        area: {
-          type: String,
-        },
-        city: {
-          type: String,
-        },
-        country: {
-          type: String,
-        },
-        fullName: {
-          type: String,
-        },
-        id: {
-          type: Number,
-        },
-        localInfo: {
-          type: String,
-        },
-        mobNo: {
-          type: String,
-        },
-        pinCode: {
-          type: String,
-        },
-        selected: {
-          type: Boolean,
-        },
-        state: {
-          type: String,
-        },
-      },
-    ],
+      ],
+      required: true,
+    },
     email: {
       type: String,
       required: true,
