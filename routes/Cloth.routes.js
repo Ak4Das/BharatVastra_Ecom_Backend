@@ -1,5 +1,4 @@
 import {
-  fetchAllCloths,
   fetchClothsById,
   fetchClothsByMainCategory,
   fetchByIdAndUpdate,
@@ -11,8 +10,6 @@ import {
 
 import express from "express"
 const router = express.Router()
-
-router.get("/", fetchAllCloths)
 
 router.get("/:id", fetchClothsById)
 

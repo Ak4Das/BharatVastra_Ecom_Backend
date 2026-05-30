@@ -1,5 +1,4 @@
 import {
-  getAllCloths,
   getClothById,
   getClothsByMainCategory,
   findByIdAndUpdate,
@@ -9,8 +8,6 @@ import {
   getDistinctCommonCategories,
 } from "../services/Cloth.service.js"
 import { asyncHandler } from "../utils/asyncHandler.js"
-
-export const fetchAllCloths = asyncHandler(getAllCloths)
 
 export const fetchClothsById = asyncHandler(getClothById)
 

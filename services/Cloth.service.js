@@ -1,16 +1,6 @@
 import ClothModel from "../models/Cloth.model.js"
 import { BadRequestError, NotFoundError } from "../utils/customErrorHandler.js"
 
-export const getAllCloths = async (req, res) => {
-  try {
-    const allCloths = await ClothModel.find()
-    res.status(200)
-    res.json(allCloths)
-  } catch (error) {
-    throw error
-  }
-}
-
 export const getClothById = async (req, res) => {
   try {
     const id = req.params.id
