@@ -9,7 +9,11 @@ export const getAllOrders = async (req, res) => {
   try {
     const allOrders = await OrderModel.find()
     res.status(200)
-    res.json(allOrders)
+    res.json({
+      success: true,
+      message: "Orders fetched successfully",
+      respondedData: allOrders,
+    })
   } catch (error) {
     throw error
   }
@@ -22,7 +26,11 @@ export const getOrderByUserId = async (req, res) => {
     }
     const allOrders = await OrderModel.find({ userId: req.params.id })
     res.status(200)
-    res.json(allOrders)
+    res.json({
+      success: true,
+      message: "Order fetched successfully",
+      respondedData: allOrders,
+    })
   } catch (error) {
     throw error
   }
@@ -35,7 +43,11 @@ export const getOrderByOrderId = async (req, res) => {
     }
     const order = await OrderModel.find({ id: req.params.id })
     res.status(200)
-    res.json(order)
+    res.json({
+      success: true,
+      message: "Order fetched successfully",
+      respondedData: order,
+    })
   } catch (error) {
     throw error
   }
@@ -49,7 +61,11 @@ export const saveNewOrder = async (req, res) => {
     const NewOrder = new OrderModel(req.body)
     await NewOrder.save()
     res.status(200)
-    res.json(NewOrder)
+    res.json({
+      success: true,
+      message: "Order saved successfully",
+      respondedData: NewOrder,
+    })
   } catch (error) {
     if (error.name === "ValidationError") {
       throw new ValidationError(error.message)
@@ -80,7 +96,11 @@ export const findOrderByIdAndUpdate = async (req, res) => {
       new: true,
     })
     res.status(200)
-    res.json(order)
+    res.json({
+      success: true,
+      message: "Order updated successfully",
+      respondedData: order,
+    })
   } catch (error) {
     throw error
   }
@@ -99,7 +119,11 @@ export const findOrderByIdAndDelete = async (req, res) => {
       id: req.params.id,
     })
     res.status(200)
-    res.json(deletedOrder)
+    res.json({
+      success: true,
+      message: "Order deleted successfully",
+      respondedData: deletedOrder,
+    })
   } catch (error) {
     throw error
   }

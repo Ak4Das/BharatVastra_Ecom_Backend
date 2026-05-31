@@ -35,10 +35,6 @@ app.use("/user", UsersRoutes)
 import { globalErrorHandler } from "./middlewares/errorMiddleware.js"
 app.use(globalErrorHandler)
 
-app.get("/loaderio-68172d438eec982d7f8651259dfb5025.txt", (req, res) => {
-  res.send("loaderio-68172d438eec982d7f8651259dfb5025")
-})
-
 // START SERVER
 app.listen(3000, () => {
   console.log("Server started at port : ", 3000)

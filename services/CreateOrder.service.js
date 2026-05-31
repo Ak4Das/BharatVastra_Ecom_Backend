@@ -9,7 +9,11 @@ export const getAllItems = async (req, res) => {
   try {
     const allItems = await CreateOrderModel.find()
     res.status(200)
-    res.json(allItems)
+    res.json({
+      success: true,
+      message: "CreateOrders fetched successfully",
+      respondedData: allItems,
+    })
   } catch (error) {
     throw error
   }
@@ -20,9 +24,13 @@ export const getItemsByUserId = async (req, res) => {
     if (!req.params.id) {
       throw new BadRequestError("Not mentioned user id on API.")
     }
-    const allItems = await CreateOrderModel.find({ userId: req.params.id })
+    const item = await CreateOrderModel.find({ userId: req.params.id })
     res.status(200)
-    res.json(allItems)
+    res.json({
+      success: true,
+      message: "CreateOrder fetched successfully",
+      respondedData: item,
+    })
   } catch (error) {
     throw error
   }
@@ -36,7 +44,11 @@ export const saveNewItem = async (req, res) => {
     const NewItem = new CreateOrderModel(req.body)
     await NewItem.save()
     res.status(200)
-    res.json(NewItem)
+    res.json({
+      success: true,
+      message: "CreateOrder created successfully",
+      respondedData: NewItem,
+    })
   } catch (error) {
     if (error.name === "ValidationError") {
       throw new ValidationError(error.message)
@@ -71,7 +83,11 @@ export const findCreateOrderByUserIdAndUpdate = async (req, res) => {
       },
     )
     res.status(200)
-    res.json(createOrder)
+    res.json({
+      success: true,
+      message: "CreateOrder updated successfully",
+      respondedData: createOrder,
+    })
   } catch (error) {
     throw error
   }
@@ -90,7 +106,11 @@ export const findByUserIdAndDelete = async (req, res) => {
       userId: req.params.id,
     })
     res.status(200)
-    res.json(item)
+    res.json({
+      success: true,
+      message: "CreateOrder deleted successfully",
+      respondedData: item,
+    })
   } catch (error) {
     throw error
   }

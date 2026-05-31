@@ -12,7 +12,11 @@ export const getClothById = async (req, res) => {
       throw new NotFoundError("Product not found.")
     }
     res.status(200)
-    res.json(cloth)
+    res.json({
+      success: true,
+      message: "Cloth fetched successfully",
+      respondedData: cloth,
+    })
   } catch (error) {
     throw error
   }
@@ -25,7 +29,11 @@ export const getNewArriveCloths = async (req, res) => {
       throw new NotFoundError("No products are newly arrived.")
     }
     res.status(200)
-    res.json(cloth)
+    res.json({
+      success: true,
+      message: "Cloths fetched successfully",
+      respondedData: cloth,
+    })
   } catch (error) {
     throw error
   }
@@ -35,7 +43,11 @@ export const getDistinctCommonCategories = async (req, res) => {
   try {
     const categories = await ClothModel.distinct("commonCategory")
     res.status(200)
-    res.json(categories)
+    res.json({
+      success: true,
+      message: "Categories fetched successfully",
+      respondedData: categories,
+    })
   } catch (error) {
     throw error
   }
@@ -68,7 +80,11 @@ export const getOfferOnACategory = async (req, res) => {
       throw new NotFoundError(`No ${commonCategory} available with offer.`)
     }
     res.status(200)
-    res.json(cloth)
+    res.json({
+      success: true,
+      message: "Cloth fetched successfully",
+      respondedData: cloth,
+    })
   } catch (error) {
     throw error
   }
@@ -85,7 +101,11 @@ export const getClothsByMainCategory = async (req, res) => {
       throw new NotFoundError(`No product available for ${mainCategory}.`)
     }
     res.status(200)
-    res.json(cloths)
+    res.json({
+      success: true,
+      message: "Cloth fetched successfully",
+      respondedData: cloths,
+    })
   } catch (error) {
     throw error
   }
@@ -102,7 +122,11 @@ export const getClothsByCommonCategory = async (req, res) => {
       throw new NotFoundError(`No ${commonCategory} available.`)
     }
     res.status(200)
-    res.json(cloths)
+    res.json({
+      success: true,
+      message: "Cloth fetched successfully",
+      respondedData: cloths,
+    })
   } catch (error) {
     throw error
   }
@@ -126,7 +150,11 @@ export const findByIdAndUpdate = async (req, res) => {
       new: true,
     })
     res.status(200)
-    res.json(cloth)
+    res.json({
+      success: true,
+      message: "Cloth updated successfully",
+      respondedData: cloth,
+    })
   } catch (error) {
     throw error
   }

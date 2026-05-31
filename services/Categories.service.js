@@ -5,7 +5,11 @@ export const fetchAllCategories = async (req, res) => {
   try {
     const allCategories = await CategoryModel.find()
     res.status(200)
-    res.json(allCategories)
+    res.json({
+      success: true,
+      message: "Categories fetched successfully",
+      respondedData: allCategories,
+    })
   } catch (error) {
     throw error
   }
@@ -21,7 +25,11 @@ export const fetchCategory = async (req, res) => {
       throw new NotFoundError("Category not found.")
     }
     res.status(200)
-    res.json(Category)
+    res.json({
+      success: true,
+      message: "Category fetched successfully",
+      respondedData: Category,
+    })
   } catch (error) {
     throw error
   }

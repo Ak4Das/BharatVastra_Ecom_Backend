@@ -9,7 +9,11 @@ export const getAllUsers = async (req, res) => {
   try {
     const allUsers = await UserModel.find()
     res.status(200)
-    res.json(allUsers)
+    res.json({
+      success: true,
+      message: "User fetched successfully",
+      respondedData: allUsers,
+    })
   } catch (error) {
     throw error
   }
@@ -26,7 +30,11 @@ export const getUserById = async (req, res) => {
       throw new NotFoundError("No user found.")
     }
     res.status(200)
-    res.json(User)
+    res.json({
+      success: true,
+      message: "User fetched successfully",
+      respondedData: User,
+    })
   } catch (error) {
     throw error
   }
@@ -40,7 +48,11 @@ export const saveNewUser = async (req, res) => {
     const NewUser = new UserModel(req.body)
     await NewUser.save()
     res.status(200)
-    res.json(NewUser)
+    res.json({
+      success: true,
+      message: "User saved successfully",
+      respondedData: NewUser,
+    })
   } catch (error) {
     if (error.name === "ValidationError") {
       throw new ValidationError(error.message)
@@ -71,7 +83,11 @@ export const findByIdAndUpdate = async (req, res) => {
       new: true,
     })
     res.status(200)
-    res.json(updatedUser)
+    res.json({
+      success: true,
+      message: "User updated successfully",
+      respondedData: updatedUser,
+    })
   } catch (error) {
     throw error
   }
@@ -99,7 +115,11 @@ export const findByIdAndUpdateAddress = async (req, res) => {
       },
     )
     res.status(200)
-    res.json(updatedUser)
+    res.json({
+      success: true,
+      message: "Address updated successfully",
+      respondedData: updatedUser,
+    })
   } catch (error) {
     throw error
   }
@@ -127,7 +147,11 @@ export const findByIdAndUpdateCartItems = async (req, res) => {
       },
     )
     res.status(200)
-    res.json(updatedUser)
+    res.json({
+      success: true,
+      message: "Cart updated successfully",
+      respondedData: updatedUser,
+    })
   } catch (error) {
     throw error
   }
@@ -155,7 +179,11 @@ export const findByIdAndUpdateWishlistItems = async (req, res) => {
       },
     )
     res.status(200)
-    res.json(updatedUser)
+    res.json({
+      success: true,
+      message: "Wishlist updated successfully",
+      respondedData: updatedUser,
+    })
   } catch (error) {
     throw error
   }
