@@ -18,7 +18,7 @@ router.get("/:id", fetchOrderByOrderId)
 
 router.post("/saveOrder", postNewOrder)
 
-router.post("/update/:id", fetchOrderByIdAndUpdate)
+router.patch("/update/:id", fetchOrderByIdAndUpdate)
 
 router.delete("/delete/:id", fetchOrderByIdAndDelete)
 
