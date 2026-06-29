@@ -6,10 +6,13 @@ import {
   fetchClothsByCommonCategory,
   fetchNewArriveCloths,
   fetchDistinctCommonCategories,
+  fetchCloths,
 } from "../controllers/Cloth.controller.js"
 
 import express from "express"
 const router = express.Router()
+
+router.get("/", fetchCloths)
 
 router.get("/:id", fetchClothsById)
 
