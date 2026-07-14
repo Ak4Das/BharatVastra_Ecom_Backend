@@ -63,6 +63,7 @@ export const getCloths = async (req, res) => {
 
     res.status(200).json({
       success: true,
+      message:"cloth fetched successfully",
       respondedData: products,
       pagination: {
         totalItems: totalProducts,
@@ -72,7 +73,7 @@ export const getCloths = async (req, res) => {
       },
     })
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message })
+    res.status(400).json({ success: false, message: error.message })
   }
 }
 
@@ -93,7 +94,7 @@ export const getClothById = async (req, res) => {
       respondedData: cloth,
     })
   } catch (error) {
-    throw error
+    res.status(400).json({ success: false, message: error.message })
   }
 }
 
@@ -131,7 +132,7 @@ export const getNewArriveCloths = async (req, res, next) => {
       },
     })
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message })
+    res.status(400).json({ success: false, message: error.message })
   }
 }
 
@@ -145,7 +146,7 @@ export const getDistinctCommonCategories = async (req, res) => {
       respondedData: categories,
     })
   } catch (error) {
-    throw error
+    res.status(400).json({ success: false, message: error.message })
   }
 }
 
@@ -190,6 +191,7 @@ export const getOfferOnACategory = async (req, res) => {
 
     return res.status(200).json({
       success: true,
+      message:"products fetched successfully",
       respondedData: products,
       pagination: {
         currentPage: parseInt(page),
@@ -199,7 +201,7 @@ export const getOfferOnACategory = async (req, res) => {
       },
     })
   } catch (error) {
-    return res.status(500).json({ success: false, message: error.message })
+    res.status(400).json({ success: false, message: error.message })
   }
 }
 
@@ -220,7 +222,7 @@ export const getClothsByMainCategory = async (req, res) => {
       respondedData: cloths,
     })
   } catch (error) {
-    throw error
+    res.status(400).json({ success: false, message: error.message })
   }
 }
 
@@ -241,7 +243,7 @@ export const getClothsByCommonCategory = async (req, res) => {
       respondedData: cloths,
     })
   } catch (error) {
-    throw error
+    res.status(400).json({ success: false, message: error.message })
   }
 }
 
@@ -269,6 +271,6 @@ export const findByIdAndUpdate = async (req, res) => {
       respondedData: cloth,
     })
   } catch (error) {
-    throw error
+    res.status(400).json({ success: false, message: error.message })
   }
 }

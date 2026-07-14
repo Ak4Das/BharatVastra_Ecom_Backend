@@ -17,6 +17,9 @@ app.use(cors(corsOptions))
 app.use(express.json())
 
 // ROUTES
+import authRoutes from "./routes/auth.js"
+app.use("/auth", authRoutes)
+
 import ClothRoutes from "./routes/Cloth.routes.js"
 app.use("/cloth", ClothRoutes)
 

@@ -1,7 +1,6 @@
 import {
   getAllUsers,
   getUserById,
-  saveNewUser,
   findByIdAndUpdate,
   findByIdAndUpdateAddress,
   findByIdAndUpdateCartItems,
@@ -12,8 +11,6 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 export const fetchAllUsers = asyncHandler(getAllUsers)
 
 export const fetchUserById = asyncHandler(getUserById)
-
-export const postNewUser = asyncHandler(saveNewUser)
 
 export const fetchByIdAndUpdate = asyncHandler(findByIdAndUpdate)
 

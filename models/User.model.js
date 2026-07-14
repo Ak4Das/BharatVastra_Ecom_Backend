@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import bcrypt from "bcryptjs"
 
 const UserSchema = new mongoose.Schema(
   {
@@ -68,6 +69,9 @@ const UserSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
+      unique: [true, "This email is already active."],
+      trim: true,
+      lowercase: true,
     },
     name: {
       type: String,
@@ -86,6 +90,14 @@ const UserSchema = new mongoose.Schema(
   },
 )
 
-const User = mongoose.model("User", UserSchema)
+// Register middleware that executes before "save" operation
+UserSchema.pre("save", async function () {
+  if (!this.isModified("password")) {
+    // "this" points to document being saved
+    return
+  }
+  const salt = await bcrypt.genSalt(10) // A salt is random data added to a password before hashing (Here 10 is the cost factor)
+  this.password = await bcrypt.hash(this.password, salt)
+})
 
-export default User
+export default mongoose.model("User", UserSchema)

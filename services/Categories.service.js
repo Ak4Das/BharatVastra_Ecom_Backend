@@ -11,7 +11,7 @@ export const fetchAllCategories = async (req, res) => {
       respondedData: allCategories,
     })
   } catch (error) {
-    throw error
+    res.status(400).json({ success: false, message: error.message })
   }
 }
 
@@ -31,6 +31,6 @@ export const fetchCategory = async (req, res) => {
       respondedData: Category,
     })
   } catch (error) {
-    throw error
+    res.status(400).json({ success: false, message: error.message })
   }
 }

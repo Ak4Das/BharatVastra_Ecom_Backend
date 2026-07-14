@@ -4,6 +4,7 @@ import {
   NotFoundError,
   ValidationError,
 } from "../utils/customErrorHandler.js"
+import bcrypt from "bcryptjs"
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -15,100 +16,83 @@ export const getAllUsers = async (req, res) => {
       respondedData: allUsers,
     })
   } catch (error) {
-    throw error
+    res.status(400).json({ success: false, message: error.message })
   }
 }
 
 export const getUserById = async (req, res) => {
   try {
-    const id = req.params.id
-    if (!id) {
-      throw new BadRequestError("Not mentioned user id on API.")
-    }
-    const User = await UserModel.findById(id)
-    if (!User) {
-      throw new NotFoundError("No user found.")
+    const user = await UserModel.findById(req.user.id).select("-password")
+    if (!user) {
+      return res.status(404).json({ error: "User profile not found." })
     }
     res.status(200)
     res.json({
       success: true,
-      message: "User fetched successfully",
-      respondedData: User,
+      message: "user fetched successfully",
+      respondedData: user,
     })
   } catch (error) {
-    throw error
-  }
-}
-
-export const saveNewUser = async (req, res) => {
-  try {
-    if (!req.body) {
-      throw new BadRequestError("Request body is missing.")
-    }
-    const NewUser = new UserModel(req.body)
-    await NewUser.save()
-    res.status(200)
-    res.json({
-      success: true,
-      message: "User saved successfully",
-      respondedData: NewUser,
-    })
-  } catch (error) {
-    if (error.name === "ValidationError") {
-      throw new ValidationError(error.message)
-    } else if (error.code === 11000) {
-      const field = Object.keys(error.keyPattern)[0]
-      throw new ValidationError(`${field} must be unique`)
-    } else {
-      throw error
-    }
+    res.status(400).json({ success: false, message: error.message })
   }
 }
 
 export const findByIdAndUpdate = async (req, res) => {
   try {
-    const id = req.params.id
-    if (!id) {
-      throw new BadRequestError("User id is missing.")
+    const userProfile = await UserModel.findById(req.user.id)
+    if (!userProfile) {
+      return res.status(400).json({ error: "User profile not found." })
     }
-    const User = await UserModel.find({ _id: id })
-    if (User.length === 0) {
-      throw new NotFoundError("User not found.")
+
+    if (req.body.name) {
+      userProfile.name = req.body.name.trim()
     }
-    const dataToUpdate = req.body
-    if (!dataToUpdate) {
-      throw new BadRequestError("Request body is missing.")
+
+    if (req.body.profileImage !== undefined) {
+      userProfile.profileImage = req.body.profileImage.trim()
     }
-    const updatedUser = await UserModel.findByIdAndUpdate(id, dataToUpdate, {
-      new: true,
-    })
+
+    if (req.body.newPassword) {
+      const matchesCurrent = await bcrypt.compare(
+        req.body.currentPassword,
+        userProfile.password,
+      )
+      if (!matchesCurrent) {
+        return res.status(400).json({
+          error: "The provided active validation password is invalid.",
+        })
+      }
+
+      userProfile.password = req.body.newPassword
+    }
+    
+    const profile = new UserModel(userProfile)
+
+    const response = await profile.save()
+
     res.status(200)
     res.json({
       success: true,
       message: "User updated successfully",
-      respondedData: updatedUser,
+      respondedData: response,
     })
   } catch (error) {
-    throw error
+    res.status(400).json({ success: false, message: error.message })
   }
 }
 
 export const findByIdAndUpdateAddress = async (req, res) => {
   try {
-    const id = req.params.id
-    if (!id) {
-      throw new BadRequestError("User id is missing.")
-    }
-    const User = await UserModel.find({ _id: id })
-    if (User.length === 0) {
-      throw new NotFoundError("User not found.")
+    const userProfile = await UserModel.findById(req.user.id)
+    if (!userProfile) {
+      return res.status(400).json({ error: "User profile not found." })
     }
     const dataToUpdate = req.body
     if (!dataToUpdate) {
       throw new BadRequestError("Request body is missing.")
     }
     const updatedUser = await UserModel.findByIdAndUpdate(
-      id,
+      req.user.id,
       { address: dataToUpdate },
       {
         new: true,
@@ -121,26 +105,22 @@ export const findByIdAndUpdateAddress = async (req, res) => {
       respondedData: updatedUser,
     })
   } catch (error) {
-    throw error
+    res.status(400).json({ success: false, message: error.message })
   }
 }
 
 export const findByIdAndUpdateCartItems = async (req, res) => {
   try {
-    const id = req.params.id
-    if (!id) {
-      throw new BadRequestError("User id is missing.")
-    }
-    const User = await UserModel.find({ _id: id })
-    if (User.length === 0) {
-      throw new NotFoundError("User not found.")
+    const userProfile = await UserModel.findById(req.user.id)
+    if (!userProfile) {
+      return res.status(400).json({ error: "User profile not found." })
     }
     const dataToUpdate = req.body
     if (!dataToUpdate) {
       throw new BadRequestError("Request body is missing.")
     }
     const updatedUser = await UserModel.findByIdAndUpdate(
-      id,
+      req.user.id,
       { addToCartItems: dataToUpdate },
       {
         new: true,
@@ -153,26 +133,22 @@ export const findByIdAndUpdateCartItems = async (req, res) => {
       respondedData: updatedUser,
     })
   } catch (error) {
-    throw error
+    res.status(400).json({ success: false, message: error.message })
   }
 }
 
 export const findByIdAndUpdateWishlistItems = async (req, res) => {
   try {
-    const id = req.params.id
-    if (!id) {
-      throw new BadRequestError("User id is missing.")
-    }
-    const User = await UserModel.find({ _id: id })
-    if (User.length === 0) {
-      throw new NotFoundError("User not found.")
+    const userProfile = await UserModel.findById(req.user.id)
+    if (!userProfile) {
+      return res.status(400).json({ error: "User profile not found." })
     }
     const dataToUpdate = req.body
     if (!dataToUpdate) {
       throw new BadRequestError("Request body is missing.")
     }
     const updatedUser = await UserModel.findByIdAndUpdate(
-      id,
+      req.user.id,
       { addToWishlistItems: dataToUpdate },
       {
         new: true,
@@ -185,6 +161,6 @@ export const findByIdAndUpdateWishlistItems = async (req, res) => {
       respondedData: updatedUser,
     })
   } catch (error) {
-    throw error
+    res.status(400).json({ success: false, message: error.message })
   }
 }

@@ -15,7 +15,7 @@ export const getAllItems = async (req, res) => {
       respondedData: allItems,
     })
   } catch (error) {
-    throw error
+    res.status(400).json({ success: false, message: error.message })
   }
 }
 
@@ -32,7 +32,7 @@ export const getItemsByUserId = async (req, res) => {
       respondedData: item,
     })
   } catch (error) {
-    throw error
+    res.status(400).json({ success: false, message: error.message })
   }
 }
 
@@ -56,7 +56,7 @@ export const saveNewItem = async (req, res) => {
       const field = Object.keys(error.keyPattern)[0]
       throw new ValidationError(`${field} must be unique`)
     } else {
-      throw error
+      res.status(400).json({ success: false, message: error.message })
     }
   }
 }
@@ -89,7 +89,7 @@ export const findCreateOrderByUserIdAndUpdate = async (req, res) => {
       respondedData: createOrder,
     })
   } catch (error) {
-    throw error
+    res.status(400).json({ success: false, message: error.message })
   }
 }
 
@@ -112,6 +112,6 @@ export const findByUserIdAndDelete = async (req, res) => {
       respondedData: item,
     })
   } catch (error) {
-    throw error
+    res.status(400).json({ success: false, message: error.message })
   }
 }

@@ -1,28 +1,26 @@
 import {
   fetchAllUsers,
   fetchUserById,
-  postNewUser,
   fetchByIdAndUpdate,
   fetchByIdAndUpdateAddress,
   fetchByIdAndUpdateCartItems,
   fetchByIdAndUpdateWishlistItems,
 } from "../controllers/User.controller.js"
+import auth from "../middlewares/auth.js"
 
 import express from "express"
 const router = express.Router()
 
-router.get("/", fetchAllUsers)
+router.get("/", auth, fetchAllUsers)
 
-router.get("/:id", fetchUserById)
+router.get("/me", auth, fetchUserById)
 
-router.post("/saveUser", postNewUser)
+router.post("/updateUser", auth, fetchByIdAndUpdate)
 
-router.post("/updateUser/:id", fetchByIdAndUpdate)
+router.post("/updateUserAddress", auth, fetchByIdAndUpdateAddress)
 
-router.post("/updateUserAddress/:id", fetchByIdAndUpdateAddress)
+router.post("/updateCartItems", auth, fetchByIdAndUpdateCartItems)
 
-router.post("/updateCartItems/:id", fetchByIdAndUpdateCartItems)
-
-router.post("/updateWishlistItems/:id", fetchByIdAndUpdateWishlistItems)
+router.post("/updateWishlistItems", auth, fetchByIdAndUpdateWishlistItems)
 
 export default router
